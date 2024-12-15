@@ -26,7 +26,7 @@ fn check_report_safety(report: &[i32]) -> bool {
         (diff <=  3 && diff > 0 && !ascending)
         ) {
 
-                is_safe = false;
+            is_safe = false;
         }
         previous = *num
     }

@@ -22,9 +22,7 @@ pub fn d4() -> (u64, u64) {
                     // Check vertical
                     if line_idx < line_count - 3 {
                         let column = [
-                            // chr as u8,
-                            // 2464, 1877
-                            input_bytes[line_len*(line_idx) + 2*line_idx + char_idx],
+                            chr as u8,
                             input_bytes[line_len*(line_idx+1) + 2*line_idx + 2 + char_idx],
                             input_bytes[line_len*(line_idx+2) + 2*line_idx + 4 + char_idx],
                             input_bytes[line_len*(line_idx+3) + 2*line_idx + 6 + char_idx],

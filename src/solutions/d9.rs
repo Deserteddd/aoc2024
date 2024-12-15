@@ -2,20 +2,64 @@
 pub fn d9() -> (u64, u64) {
 
     let input = std::fs::read_to_string("./inputs/d9.txt").unwrap();
-    let input = "2333133121414131402";
+    // let input = "2333133121414131402";
     // let input = "12345";
     let decoded = decode(&input);
+    // print_disk(&decoded);
     let part_1 = part_1(decoded.clone());
     let part_2 = part_2(decoded);
 
     (part_1, part_2) // too low
 }
+fn print_disk(disk: &Vec<Option<u32>>) {
+    disk
+        .iter()
+        .for_each(|elem| 
+            if let Some(n) = elem {print!("{n}")} 
+            else {print!(".")
+        });
 
-fn part_2(mut input: Vec<Option<u32>>) -> u64 {
-    println!("{:?}", input);
-    let empty = find_empty_block(&input, 3);
-    println!("Empty: {:?}", empty);
-    calculate_checksum(&input)
+    println!()
+}
+fn part_2(mut disk: Vec<Option<u32>>) -> u64 {
+    let mut is_start = true;
+    let mut start = disk
+        .iter()
+        .enumerate()
+        .find(|(_, c)| c.is_some())
+        .unwrap();
+    let mut blocks: Vec<(usize, usize)> = vec![];
+    for i in start.0..disk.len() {
+        if disk[i] == *start.1 {
+            if is_start {
+                is_start = false;
+            }
+        } else {
+            is_start = true;
+            if disk.get(start.0..i).unwrap()[0] != None {
+                blocks.push((start.0, i));
+            }
+            start = (i, &disk[i]);
+        }
+    }
+    if start.1.is_some() {
+        blocks.push((start.0, disk.len()));
+    }
+    // println!("Blocks: {:?}", blocks);
+    blocks.iter().rev().for_each(|block| {
+        let block_len = block.1-block.0;
+        // print_disk(&disk);
+        if let Some(empty_start) = find_empty_block(&disk, block_len) {
+            if empty_start < block.0 {
+            // println!("{:?}", disk.get(block.0..block.1));
+            for i in 0..block_len {
+                disk[empty_start+i] = disk[block.0+i].take()
+            }
+            }
+        }
+
+    });
+    calculate_checksum(&disk)
 }
 
 fn find_empty_block(disk: &Vec<Option<u32>>, size: usize) -> Option<usize> {
