@@ -13,7 +13,8 @@ fn main() {
         print_day(8, d8),
         print_day(9, d9),
         print_day(10, d10),
-        print_day(11, d11)
+        print_day(11, d11),
+        print_day(15, d15)
     ]);
 }
 
